@@ -1,0 +1,71 @@
+#!/bin/bash
+
+set -e
+
+## these bundled libs are broken (eg. missing code)
+DISABLE_BROKEN+=(
+    --disable-crashreporter
+    --disable-libjpeg-turbo
+)
+
+DISABLE_MALWARE+=(
+    --disable-eme
+    --disable-gpsd
+    --disable-synth-speechd
+    --disable-webspeech
+    --disable-webspeechtestbackend
+    --disable-necko-wifi
+    --disable-nfc
+    --disable-safe-browsing
+    --disable-startup-notification
+    --disable-b2g-bt
+    --disable-b2g-camera
+    --disable-b2g-ril
+    --disable-gamepad
+    --disable-updater
+)
+
+SYSTEM_LIBS+=(
+    --with-system-bz2
+    --with-system-icu
+    --with-system-jpeg
+    --with-system-png
+    --with-system-zlib
+    --with-system-ffi
+    --enable-system-cairo
+    --enable-system-pixman
+    --enable-system-sqlite
+    --enable-system-hunspell
+)
+
+autoreconf
+
+( cd mozilla && autoreconf )
+( cd mozilla/js/src && autoreconf )
+
+./configure \
+    "${DISABLE_BROKEN[@]}" \
+    "${DISABLE_MALWARE[@]}" \
+    "${SYSTEM_LIBS[@]}" \
+    --prefix=/opt/seamonkey \
+    --disable-wmf \
+    --disable-dbm \
+    --disable-accessibility \
+    --disable-gconf \
+    --disable-gio \
+    --disable-gnomeui \
+    --disable-mobile-optimize \
+    --disable-webrtc \
+    --disable-ldap \
+    --disable-mapi \
+    --disable-calendar \
+    --enable-alsa \
+
+#    --disable-ffmpeg \
+#    --disable-fmp4 \
+
+#    --with-system-libevent \
+#    --with-system-nss \
+
+# too old
+#    --with-system-nspr \
