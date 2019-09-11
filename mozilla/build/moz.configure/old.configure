@@ -99,11 +99,16 @@ def prepare_configure(old_configure, mozconfig, autoconf, build_env, shell,
             refresh = False
 
     if refresh:
+        # FOO
         log.info('Refreshing %s with %s', old_configure, autoconf)
+        log.info('shell=%s', shell)
+        log.info('args=%s', '--localdir=%s' % os.path.dirname(old_configure))
+        log.info('args=%s', old_configure + '.in')
         script = subprocess.check_output([
             shell, autoconf,
             '--localdir=%s' % os.path.dirname(old_configure),
-            old_configure + '.in'])
+            old_configure + '.in'],
+            cwd=os.path.dirname(old_configure))
 
         # Make old-configure append to config.log, where we put our own log.
         # This could be done with a m4 macro, but it's way easier this way
