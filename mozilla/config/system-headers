@@ -1270,9 +1270,7 @@ libsn/sn-util.h
 #if MOZ_SYSTEM_HUNSPELL==1
 hunspell.hxx
 #endif
-#if MOZ_SYSTEM_BZ2==1
 bzlib.h
-#endif
 #ifdef MOZ_ENABLE_GIO
 gio/gio.h
 #endif

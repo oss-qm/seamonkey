@@ -2153,7 +2153,7 @@ dnl system BZIP2 Support
 dnl ========================================================
 MOZ_ARG_WITH_STRING(system-bz2,
 [  --with-system-bz2[=PFX]
-                          Use system libbz2 [installed at prefix PFX]],
+                          Prefix to system libbz2 (if non-standard)],
     BZ2_DIR=$withval)
 
 _SAVE_CFLAGS=$CFLAGS
@@ -2163,17 +2163,14 @@ if test -n "${BZ2_DIR}" -a "${BZ2_DIR}" != "yes"; then
     CFLAGS="-I${BZ2_DIR}/include $CFLAGS"
     LDFLAGS="-L${BZ2_DIR}/lib $LDFLAGS"
 fi
-if test -z "$BZ2_DIR" -o "$BZ2_DIR" = no; then
-    MOZ_SYSTEM_BZ2=
-else
-    AC_CHECK_LIB(bz2, BZ2_bzread, [MOZ_SYSTEM_BZ2=1 MOZ_BZ2_LIBS="-lbz2"],
-    [MOZ_SYSTEM_BZ2= MOZ_BZ2_CFLAGS= MOZ_BZ2_LIBS=])
-fi
+
+AC_CHECK_LIB(bz2, BZ2_bzread, [MOZ_SYSTEM_BZ2=1 MOZ_BZ2_LIBS="-lbz2"])
+
 CFLAGS=$_SAVE_CFLAGS
 LDFLAGS=$_SAVE_LDFLAGS
 LIBS=$_SAVE_LIBS
 
-if test "${BZ2_DIR}" -a -d "${BZ2_DIR}" -a "$MOZ_SYSTEM_BZ2" = 1; then
+if test "${BZ2_DIR}" -a -d "${BZ2_DIR}" ; then
     MOZ_BZ2_CFLAGS="-I${BZ2_DIR}/include"
     MOZ_BZ2_LIBS="-L${BZ2_DIR}/lib ${MOZ_BZ2_LIBS}"
 fi
