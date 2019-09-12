@@ -6,6 +6,7 @@ set -e
 DISABLE_BROKEN+=(
     --disable-crashreporter
     --disable-libjpeg-turbo
+    --disable-sps-profiler
 )
 
 DISABLE_MALWARE+=(

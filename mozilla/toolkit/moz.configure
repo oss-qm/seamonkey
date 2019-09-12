@@ -35,6 +35,9 @@ set_config('MOZ_JPROF', jprof)
 set_define('MOZ_JPROF', jprof)
 imply_option('--enable-profiling', jprof)
 
+option('--enable-sps-profiler', env='MOZ_SPS_PROFILER',
+       help='Enable sps profiler')
+
 @depends(target)
 def sps_profiler(target):
     if target.os == 'Android':
@@ -43,10 +46,11 @@ def sps_profiler(target):
         return target.cpu in ('x86', 'x86_64')
     return target.os in ('OSX', 'WINNT')
 
-@depends(sps_profiler)
-def sps_profiler_define(value):
-    if value:
-        return True
+@depends(sps_profiler,'--enable-sps-profiler')
+def sps_profiler_define(supported,enabled):
+    if supported:
+        if enabled:
+            return True
 
 set_config('MOZ_ENABLE_PROFILER_SPS', sps_profiler_define)
 set_define('MOZ_ENABLE_PROFILER_SPS', sps_profiler_define)
